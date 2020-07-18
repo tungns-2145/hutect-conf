@@ -82,7 +82,7 @@ const Topbar = props => {
             <Link
               color={'secondary'}
               component={RouterLink}
-              to="/sign-in"
+              to="/signin"
               variant="h6"
             >
               Log-in
@@ -90,7 +90,7 @@ const Topbar = props => {
           </Typography>
           
         </div>
-        <RouterLink to="/sign-in" >
+        <RouterLink to="/signin" >
           <IconButton
               className={classes.signOutButton}
               color="secondary"

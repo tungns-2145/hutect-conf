@@ -71,13 +71,13 @@ const Routes = () => {
         component={SignUpView}
         exact
         layout={MinimalLayout}
-        path="/sign-up"
+        path="/signup"
       />
       <RouteWithLayout
         component={SignInView}
         exact
         layout={MinimalLayout}
-        path="/sign-in"
+        path="/signin"
       />
       {/* <RouteWithLayout
         component={NotFoundView}

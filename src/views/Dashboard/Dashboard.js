@@ -45,7 +45,7 @@ class Dashboard extends Component {
       this.getCalender(uid)
     }else {
       alert('need login')
-      this.props.history.push('/sign-in')
+      this.props.history.push('/signin')
     }
   }
 
@@ -134,7 +134,7 @@ class Dashboard extends Component {
       });
     }else {
       alert('Need login')
-      this.props.history.push('/sign-in')
+      this.props.history.push('/signin')
     }
     
   }
