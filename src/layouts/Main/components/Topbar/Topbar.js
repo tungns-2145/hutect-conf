@@ -44,7 +44,7 @@ const Topbar = props => {
 
       </RouterLink>
       <Toolbar>
-        <div style ={{ marginRight: '2vw'}}>
+        {/* <div style ={{ marginRight: '2vw'}}>
           <Typography
             variant="caption"
           >
@@ -72,9 +72,24 @@ const Topbar = props => {
             </Link>
           </Typography>
           
-        </div>
+        </div> */}
         
         <div className={classes.flexGrow} />
+        <div>
+          <Typography
+            variant="caption"
+          >
+            <Link
+              color={'secondary'}
+              component={RouterLink}
+              to="/sign-in"
+              variant="h6"
+            >
+              Log-in
+            </Link>
+          </Typography>
+          
+        </div>
         <RouterLink to="/sign-in" >
           <IconButton
               className={classes.signOutButton}

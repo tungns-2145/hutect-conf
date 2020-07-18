@@ -5,11 +5,11 @@ import 'firebase/database'
 import 'firebase/storage'
 
 const config = {
-  apiKey: 'AIzaSyCQKtSTuMp2sAvcwv0NyhRJJDidPgQbWZA',
-  authDomain: 'das-conf.firebaseapp.com',
-  databaseURL: 'https://das-conf.firebaseio.com',
-  projectId: 'das-conf',
-  storageBucket: 'das-conf.appspot.com',
+  apiKey: 'AIzaSyBnvwdb3Y1MEtVvYHbJgQ4VR2Jgyt9zwd4',
+  authDomain: 'hutech-conf.firebaseapp.com',
+  databaseURL: 'https://hutech-conf.firebaseio.com',
+  projectId: 'hutech-conf',
+  storageBucket: 'hutech-conf.appspot.com',
 //   messagingSenderId: process.env.MESSAGING_SENDER_ID,
 }
 

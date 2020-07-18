@@ -5,16 +5,16 @@ import { RouteWithLayout } from './components';
 import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 import {
-  Dashboard as DashboardView,
+  // Dashboard as DashboardView,
   ProductList as ProductListView,
-  UserList as UserListView,
-  Typography as TypographyView,
-  Icons as IconsView,
-  Account as AccountView,
-  Settings as SettingsView,
+  // UserList as UserListView,
+  // Typography as TypographyView,
+  // Icons as IconsView,
+  // Account as AccountView,
+  // Settings as SettingsView,
   SignUp as SignUpView,
   SignIn as SignInView,
-  NotFound as NotFoundView
+  // NotFound as NotFoundView
 } from './views';
 
 const Routes = () => {
@@ -23,39 +23,39 @@ const Routes = () => {
       <Redirect
         exact
         from="/"
-        to="/calender"
+        to="/calender-public"
       />
-      <RouteWithLayout
+      {/* <RouteWithLayout
         component={DashboardView}
         exact
         layout={MainLayout}
         path="/calender"
-      />
-      <RouteWithLayout
+      /> */}
+      {/* <RouteWithLayout
         component={UserListView}
         exact
         layout={MainLayout}
         path="/admin"
-      />
+      /> */}
       <RouteWithLayout
         component={ProductListView}
         exact
         layout={MainLayout}
         path="/calender-public"
       />
-      <RouteWithLayout
+      {/* <RouteWithLayout
         component={TypographyView}
         exact
         layout={MainLayout}
         path="/typography"
-      />
-      <RouteWithLayout
+      /> */}
+      {/* <RouteWithLayout
         component={IconsView}
         exact
         layout={MainLayout}
         path="/icons"
-      />
-      <RouteWithLayout
+      /> */}
+      {/* <RouteWithLayout
         component={AccountView}
         exact
         layout={MainLayout}
@@ -66,7 +66,7 @@ const Routes = () => {
         exact
         layout={MainLayout}
         path="/settings"
-      />
+      /> */}
       <RouteWithLayout
         component={SignUpView}
         exact
@@ -79,13 +79,13 @@ const Routes = () => {
         layout={MinimalLayout}
         path="/sign-in"
       />
-      <RouteWithLayout
+      {/* <RouteWithLayout
         component={NotFoundView}
         exact
         layout={MinimalLayout}
         path="/not-found"
-      />
-      <Redirect to="/not-found" />
+      /> */}
+      <Redirect to="/calender-public" />
     </Switch>
   );
 };

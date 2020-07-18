@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { Grid, Modal } from '@material-ui/core';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import { Modal as Modal2 } from '../Dashboard/components'
 import {AddEvent } from '../UserList/components';
+import { ConfirmPayment } from './components';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Base64 } from 'js-base64';
-import sha1 from 'js-sha1';
+// import { Base64 } from 'js-base64';
+// import sha1 from 'js-sha1';
 import { db } from '../../config';
 
-const SECRET = '8cd8ef52e8e101574e400365b55e11a6';
-const domain  = 'https://meet.dasvision.vn';
+// const SECRET = '8cd8ef52e8e101574e400365b55e11a6';
+const domain  = 'https://meet.jit.si';
 
 const localizer = momentLocalizer(moment);
 
@@ -22,6 +22,10 @@ class ProductList extends Component {
       eventModal: {
         open: false,
         event: null
+      },
+      confirmModal: {
+        open: false,
+        linkClass: null
       },
       linkClass: '',
       userName: '',
@@ -35,11 +39,16 @@ class ProductList extends Component {
   }
 
   componentDidMount(){
+    const uid = localStorage.getItem('uid')
+    const email = localStorage.getItem('email')
+    if (uid) {
+      this.setState({ userName: email, uid })
+    }
     this.getCalender()
   }
 
   async getCalender() {
-    const calender = await db.collection(`linkClass`).get()
+    const calender = await db.collection(`link_class`).get()
     const promise = calender.docs.map(doc => ({
       linkClass: doc.data().linkClass,
       title: doc.data().title,
@@ -51,15 +60,29 @@ class ProductList extends Component {
     this.setState({events})
   }
 
-  handlePricingOpen = (event) => {
-    this.setState({
-      linkClass: event.linkClass,
-      eventModal: {
-        open: true,
-        event: event
-      },
-      title: event.title
-    });
+  handlePricingOpen = async (event) => {
+    if(this.state.uid !== ''){
+      this.setState({
+        linkClass: event.linkClass,
+        eventModal: {
+          open: true,
+          event: event
+        },
+        title: event.title
+      });
+    }else {
+      this.setState({
+        confirmModal: {
+          open: true,
+          event: {
+            linkClass :event.linkClass,
+            id_link_class: event.id,
+            paymentCode: '',
+            uid: this.state.uid
+          }
+        },
+      });
+    }
   };
 
   handlePricingClose = () => {
@@ -73,7 +96,11 @@ class ProductList extends Component {
       eventModal: {
         open: false,
         event: null
-      }
+      },
+      confirmModal: {
+        open: false,
+        linkClass: null
+      },
     });
   };
 
@@ -91,21 +118,14 @@ class ProductList extends Component {
 
   onAdd = async (event) => {
     const { start, end, title, publicFlag } = event
-    var timestample = new Date(start).getTime()/1000;
-    var idClass = timestample;
-    var slide = 'https://courses.emg.edu.vn:3443/courses/English/VirtualLessonCamels.pdf';
-    var video = 'https://courses.emg.edu.vn:3443/courses/English/TheBactrianCamel.mp4';
-    var CheckSumValue = sha1(`roomId=${idClass}&userId=123&userName=${Base64.encode('guest')}&userRole=TEACHER&link_slide=${slide}&link_video=${video}&timeStartClass=${timestample}&secretValue=${SECRET}`)
-    var token = Base64.encode(`roomId=${idClass}&userId=123&userName=${Base64.encode('guest')}&userRole=TEACHER&link_slide=${slide}&link_video=${video}&timeStartClass=${timestample}&checkSum=${CheckSumValue}`)
-    var linkgv = domain +'/'+idClass+'?token='+token;
     let data = {
       start: new Date(start),
       end: new Date(end),
       title: title,
-      linkClass:linkgv,
+      linkClass: domain,
       publicFlag
     }
-    const meeting = await db.collection(`linkClass`).add(data)
+    const meeting = await db.collection(`link_class`).add(data)
     data = {...data, id: meeting.id}
     this.setState({
       events: [
@@ -121,7 +141,7 @@ class ProductList extends Component {
   }
   onDelete = async (e) => {
     console.log('onDelete', e)
-    await db.collection(`linkClass`).doc(e.id).delete();
+    await db.collection(`link_class`).doc(e.id).delete();
     const events = this.state.events.filter(event => event.id !== e.id)
     this.setState({
       events,
@@ -135,7 +155,7 @@ class ProductList extends Component {
     const newEvent = this.state.events
     const index = newEvent.findIndex(event => event.id === e.id)
     if( index !== -1) {
-      db.collection(`linkClass`).doc(e.id).set({
+      db.collection(`link_class`).doc(e.id).set({
         linkClass: e.linkClass,
         title: e.title,
         start: new Date(e.start),
@@ -167,13 +187,15 @@ class ProductList extends Component {
           container
           spacing={4}
         >
-          <Modal2
-            onClose={this.handlePricingClose}
-            open={this.state.pricingModalOpen}
-            title = {this.state.title}
+          <Modal
+            onClose={this.handleModalClose}
+            open={this.state.confirmModal.open}
           >
-            {this.state.linkClass}
-          </Modal2>
+            <ConfirmPayment
+              event = {this.state.confirmModal.event}
+              onCancel={this.handleModalClose}
+            />
+          </Modal>
           <Modal
             onClose={this.handleModalClose}
             open={this.state.eventModal.open}
@@ -190,6 +212,7 @@ class ProductList extends Component {
             />
           </Modal>
           {
+            this.state.uid ? 
             <Calendar
               defaultDate={new Date()}
               defaultView="week"
@@ -198,6 +221,15 @@ class ProductList extends Component {
               onSelectEvent={this.handlePricingOpen}
               onSelectSlot={this.handleEventNew}
               selectable
+              style={{ height: '80vh', width: '100vw'}}
+            />
+            :
+            <Calendar
+              defaultDate={new Date()}
+              defaultView="week"
+              events={this.state.events}
+              localizer={localizer}
+              onSelectEvent={this.handlePricingOpen}
               style={{ height: '80vh', width: '100vw'}}
             />
           }
