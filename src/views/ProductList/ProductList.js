@@ -71,17 +71,28 @@ class ProductList extends Component {
         title: event.title
       });
     }else {
-      this.setState({
-        confirmModal: {
-          open: true,
-          event: {
-            linkClass :event.linkClass,
-            id_link_class: event.id,
-            paymentCode: '',
-            uid: this.state.uid
-          }
-        },
-      });
+      const now = new Date()
+      if (now.getTime() >= new Date(event.start).getTime() && now.getTime() <= new Date(event.end).getTime()){
+        this.setState({
+          confirmModal: {
+            open: true,
+            event: {
+              linkClass :event.linkClass,
+              id_link_class: event.id,
+              paymentCode: '',
+              uid: this.state.uid
+            }
+          },
+        });
+      } else {
+        if (now.getTime() < new Date(event.start).getTime()){
+          alert('Lớp học chưa bắt đầu')
+        }
+        if(now.getTime() > new Date(event.end).getTime()){
+          alert('Lớp học đã kết thúc')
+        }
+      }
+      
     }
   };
 
