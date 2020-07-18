@@ -23,7 +23,7 @@ const Routes = () => {
       <Redirect
         exact
         from="/"
-        to="/calender-public"
+        to="/calender"
       />
       {/* <RouteWithLayout
         component={DashboardView}
@@ -41,7 +41,7 @@ const Routes = () => {
         component={ProductListView}
         exact
         layout={MainLayout}
-        path="/calender-public"
+        path="/calender"
       />
       {/* <RouteWithLayout
         component={TypographyView}
