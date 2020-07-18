@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
+import {  withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
 import { makeStyles } from '@material-ui/styles';
@@ -7,7 +7,7 @@ import {
   Grid,
   Button,
   TextField,
-  Link,
+  // Link,
   Typography
 } from '@material-ui/core';
 import firebase from '../../config'
@@ -269,7 +269,7 @@ const SignIn = props => {
                 >
                   Sign in as guest
                 </Button>
-                <Typography
+                {/* <Typography
                   color="textSecondary"
                   variant="body1"
                 >
@@ -281,7 +281,7 @@ const SignIn = props => {
                   >
                     Sign up
                   </Link>
-                </Typography>
+                </Typography> */}
               </form>
             </div>
           </div>

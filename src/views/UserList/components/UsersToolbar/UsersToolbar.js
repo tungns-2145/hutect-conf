@@ -9,12 +9,12 @@ const useStyles = makeStyles(theme => ({
   root: {},
   row: {
     height: '42px',
-    display: 'flex',
+    // display: 'flex',
     alignItems: 'center',
     marginTop: theme.spacing(1)
   },
   spacer: {
-    flexGrow: 1
+    // flexGrow: 1
   },
   importButton: {
     marginRight: theme.spacing(1)

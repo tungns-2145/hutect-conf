@@ -1,16 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
-  CardActions,
   CardContent,
   Avatar,
   Typography,
   Divider,
-  Button,
   LinearProgress
 } from '@material-ui/core';
 
@@ -35,17 +33,21 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AccountProfile = props => {
-  const { className, ...rest } = props;
+  const { userInfo, className, ...rest } = props;
 
   const classes = useStyles();
 
-  const user = {
-    name: 'Shen Zhi',
-    city: 'Los Angeles',
-    country: 'USA',
+  const userDefault = {
+    name: 'Name',
+    city: 'Hà Nội',
+    country: 'Việt Nam',
     timezone: 'GTM-7',
-    avatar: '/images/avatars/avatar_11.png'
+    avatar: '/images/avatars/default.jpg',
+    balance: 0,
+    payment_code: ''
   };
+
+  const [user] = useState(userInfo || userDefault);
 
   return (
     <Card
@@ -59,7 +61,7 @@ const AccountProfile = props => {
               gutterBottom
               variant="h2"
             >
-              John Doe
+              {user.name}
             </Typography>
             <Typography
               className={classes.locationText}
@@ -82,24 +84,15 @@ const AccountProfile = props => {
           />
         </div>
         <div className={classes.progress}>
-          <Typography variant="body1">Profile Completeness: 70%</Typography>
+          <Typography variant="body1">Payment code: {user.payment_code}</Typography>
+          <Typography variant="body1">Balance: {user.balance}</Typography>
           <LinearProgress
-            value={70}
+            value={100}
             variant="determinate"
           />
         </div>
       </CardContent>
       <Divider />
-      <CardActions>
-        <Button
-          className={classes.uploadButton}
-          color="primary"
-          variant="text"
-        >
-          Upload picture
-        </Button>
-        <Button variant="text">Remove picture</Button>
-      </CardActions>
     </Card>
   );
 };

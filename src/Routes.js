@@ -10,7 +10,7 @@ import {
   // UserList as UserListView,
   // Typography as TypographyView,
   // Icons as IconsView,
-  // Account as AccountView,
+  Account as AccountView,
   // Settings as SettingsView,
   SignUp as SignUpView,
   SignIn as SignInView,
@@ -35,7 +35,7 @@ const Routes = () => {
         component={UserListView}
         exact
         layout={MainLayout}
-        path="/admin"
+        path="/balance"
       /> */}
       <RouteWithLayout
         component={ProductListView}
@@ -47,7 +47,7 @@ const Routes = () => {
         component={TypographyView}
         exact
         layout={MainLayout}
-        path="/typography"
+        path="/balance"
       /> */}
       {/* <RouteWithLayout
         component={IconsView}
@@ -55,13 +55,13 @@ const Routes = () => {
         layout={MainLayout}
         path="/icons"
       /> */}
-      {/* <RouteWithLayout
+      <RouteWithLayout
         component={AccountView}
         exact
         layout={MainLayout}
-        path="/account"
+        path="/balance"
       />
-      <RouteWithLayout
+      {/* <RouteWithLayout
         component={SettingsView}
         exact
         layout={MainLayout}
@@ -85,7 +85,7 @@ const Routes = () => {
         layout={MinimalLayout}
         path="/not-found"
       /> */}
-      <Redirect to="/calender-public" />
+      <Redirect to="/calender" />
     </Switch>
   );
 };

@@ -80,7 +80,8 @@ class ProductList extends Component {
               linkClass :event.linkClass,
               id_link_class: event.id,
               paymentCode: '',
-              uid: this.state.uid
+              uid: this.state.uid,
+              title: event.title
             }
           },
         });
@@ -116,7 +117,6 @@ class ProductList extends Component {
   };
 
   handleEventNew = (event) => {
-    console.log(event)
     this.setState({
       start : event.start,
       end: event.end,
@@ -151,7 +151,6 @@ class ProductList extends Component {
     
   }
   onDelete = async (e) => {
-    console.log('onDelete', e)
     await db.collection(`link_class`).doc(e.id).delete();
     const events = this.state.events.filter(event => event.id !== e.id)
     this.setState({

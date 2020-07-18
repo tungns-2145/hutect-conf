@@ -13,7 +13,6 @@ import {
   Divider,
   colors
 } from '@material-ui/core';
-import { db } from '../../../../config';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -61,10 +60,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ConfirmPayment = forwardRef((props, ref) => {
+const EnterPaymentCode = forwardRef((props, ref) => {
   const {
     event,
     className,
+    onSubmit,
     onCancel,
     ...rest
   } = props;
@@ -81,68 +81,6 @@ const ConfirmPayment = forwardRef((props, ref) => {
 
   const [values, setValues] = useState(event || defaultEvent);
 
-  const getPaymentInfo = async (paymentCode) => {
-    const paymentInfos = await db.collection(`payment-info`)
-    .where('payment_code', '==', paymentCode)
-    .get()
-    return paymentInfos.docs.map(payment => ({...payment.data(),id: payment.id}))
-  }
-  const getLogInClass = async (payment_code, id) => {
-    const logIn = await db.collection('log_in_class')
-    .where('payment_code', '==', payment_code)
-    .where('id_link_class', '==', id)
-    .get()
-    return logIn.docs.map(log => ({...log.data(),id: log.id}))
-  }
-
-  const addLogIn = (id_link_class, payment_code, title) => {
-    db.collection(`log_in_class`).add({
-      id_link_class,
-      payment_code,
-      time_in: new Date(),
-      title
-    })
-  }
-
-  const joinClass = async () => {
-    const {linkClass, paymentCode, id_link_class,title } = values
-    const logIn = await getLogInClass(paymentCode, id_link_class) 
-    if (logIn.length > 0){
-      addLogIn(id_link_class, paymentCode, title)
-      window.open(linkClass)
-    } else {
-      console.log(0)
-      const paymentInfo = await getPaymentInfo(paymentCode)
-      if (paymentInfo.length > 0) {
-        const {id ,payment_code, balance, role, name} = paymentInfo[0]
-        console.log(role)
-        if(role === 'teacher'){
-          db.collection(`payment-info`).doc(id).set({
-            payment_code,
-            balance: balance + 1,
-            role, name
-          }).then(()=>{
-            addLogIn(id_link_class, payment_code, title)
-            window.open(linkClass)
-          })
-        }else if(role === 'student') {
-          if(balance > 0) {
-            db.collection(`payment-info`).doc(id).set({
-              payment_code,
-              balance: balance - 1,
-              role, name
-            }).then(()=>{
-              addLogIn(id_link_class, payment_code, title)
-              window.open(linkClass)
-            })
-          }
-        }
-      } else {
-        alert('Payment code not found')
-      }
-    }
-  }
-
   const handleFieldChange = e => {
     e.persist();
     setValues(values => ({
@@ -150,6 +88,9 @@ const ConfirmPayment = forwardRef((props, ref) => {
       [e.target.name]:
         e.target.type === 'checkbox' ? e.target.checked : e.target.value
     }));
+  };
+  const handleSubmit = () => {
+    onSubmit({ ...values });
   };
 
   return (
@@ -188,17 +129,17 @@ const ConfirmPayment = forwardRef((props, ref) => {
         </Button>
         <Button
           className={classes.confirmButton}
-          onClick={joinClass}
+          onClick={handleSubmit}
           variant="contained"
         >
-          Join class
+          Get payment info
         </Button>
       </CardActions>
     </Card>
   );
 });
 
-ConfirmPayment.propTypes = {
+EnterPaymentCode.propTypes = {
   className: PropTypes.string,
   event: PropTypes.object,
   onAdd: PropTypes.func,
@@ -207,4 +148,4 @@ ConfirmPayment.propTypes = {
   onEdit: PropTypes.func
 };
 
-export default ConfirmPayment;
+export default EnterPaymentCode;

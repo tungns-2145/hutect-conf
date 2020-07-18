@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar, Link, IconButton, Typography} from '@material-ui/core';
+import { AppBar, Toolbar, Link, IconButton} from '@material-ui/core';
 import InputIcon from '@material-ui/icons/Input';
 import firebase from '../../../../config'
 
@@ -44,61 +44,60 @@ const Topbar = props => {
 
       </RouterLink>
       <Toolbar>
-        {/* <div style ={{ marginRight: '2vw'}}>
-          <Typography
-            variant="caption"
+        <IconButton
+          className={classes.signOutButton}
+          color="inherit"
           >
-            <Link
-              color={'secondary'}
-              component={RouterLink}
-              to="/calender"
-              variant="h6"
-            >
-              Calender
-            </Link>
-          </Typography>
-        </div>
-        <div>
-          <Typography
-            variant="caption"
+          <Link
+            color={'inherit'}
+            component={RouterLink}
+            to="/balance"
+            variant="h6"
           >
-            <Link
-              color={'secondary'}
-              component={RouterLink}
-              to="/calender"
-              variant="h6"
-            >
-              Calender public
-            </Link>
-          </Typography>
-          
-        </div> */}
-        
+            View balance
+          </Link>
+        </IconButton>
+        <IconButton
+            className={classes.signOutButton}
+            color="inherit"
+          >
+          <Link
+            color={'inherit'}
+            component={RouterLink}
+            to="/calender"
+            variant="h6"
+          >
+            View calender
+          </Link>
+        </IconButton>
         <div className={classes.flexGrow} />
-        <div>
-          <Typography
-            variant="caption"
+        <IconButton
+            className={classes.signOutButton}
+            color="inherit"
+          >
+          <Link
+            color={'inherit'}
+            component={RouterLink}
+            to="/signin"
+            variant="h6"
+          >
+            Log in
+          </Link>
+        </IconButton>
+        <IconButton
+            className={classes.signOutButton}
+            color="inherit"
+            onClick={onLogOut}
           >
             <Link
-              color={'secondary'}
+              color={'inherit'}
               component={RouterLink}
               to="/signin"
               variant="h6"
             >
-              Log-in
+            <InputIcon />
             </Link>
-          </Typography>
-          
-        </div>
-        <RouterLink to="/signin" >
-          <IconButton
-              className={classes.signOutButton}
-              color="secondary"
-              onClick={onLogOut}
-            >
-              <InputIcon />
-          </IconButton>
-        </RouterLink>
+        </IconButton>
       </Toolbar>
     </AppBar>
   );
