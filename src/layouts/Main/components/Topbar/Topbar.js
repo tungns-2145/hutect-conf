@@ -65,7 +65,7 @@ const Topbar = props => {
             <Link
               color={'secondary'}
               component={RouterLink}
-              to="/calender-public"
+              to="/calender"
               variant="h6"
             >
               Calender public

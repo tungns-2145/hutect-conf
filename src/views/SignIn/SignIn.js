@@ -165,7 +165,7 @@ const SignIn = props => {
   };
   
   const guest = () =>{
-    history.push('/calender-public');
+    history.push('/calender');
   }
 
   const handleSignIn = event => {
