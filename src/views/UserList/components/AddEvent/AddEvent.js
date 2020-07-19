@@ -169,9 +169,9 @@ const AddEvent = forwardRef((props, ref) => {
               <TextField
                 className={classes.field2}
                 fullWidth
+                onChange={handleFieldChange}
                 label="Link class"
                 name="linkClass"
-                disabled
                 value={values.linkClass}
                 variant="outlined"
               />
@@ -214,7 +214,7 @@ const AddEvent = forwardRef((props, ref) => {
           
           <TextField
             className={classes.field}
-            defaultValue={moment(values.start).format('YYYY-MM-DDThh:mm:ss')}
+            defaultValue={moment(values.start).format('YYYY-MM-DDTHH:mm:ss')}
             fullWidth
             label="Start date"
             name="start"
@@ -224,7 +224,7 @@ const AddEvent = forwardRef((props, ref) => {
           />
           <TextField
             className={classes.field}
-            defaultValue={moment(values.end).format('YYYY-MM-DDThh:mm:ss')}
+            defaultValue={moment(values.end).format('YYYY-MM-DDTHH:mm:ss')}
             // disabled={values.publicFlag}
             fullWidth
             label="End date"
