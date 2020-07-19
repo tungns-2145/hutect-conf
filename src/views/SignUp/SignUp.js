@@ -174,7 +174,7 @@ const SignUp = props => {
     }));
   };
 
-  getPaymentInfo = async (paymentCode) => {
+  const getPaymentInfo = async (paymentCode) => {
     const paymentInfo = await db.collection('payment-info')
     .where('payment_code', '==', paymentCode)
     .get()
