@@ -174,24 +174,37 @@ const SignUp = props => {
     }));
   };
 
-  const handleSignUp = event => {
+  getPaymentInfo = async (paymentCode) => {
+    const paymentInfo = await db.collection('payment-info')
+    .where('payment_code', '==', paymentCode)
+    .get()
+    return paymentInfo.docs.map(info => ({...info.data(), id: info.id}))
+  }
+
+  const handleSignUp = async event => {
     const { role, balance, name, paymentCode } = formState.values
     console.log( role, balance )
     event.preventDefault();
     const uid = localStorage.getItem('uid')
     if(uid) {
-      db.collection("payment-info").add({
-        name: name,
-        role,
-        payment_code: paymentCode,
-        balance
-      }).then(()=>{
-        setFormState(formState => ({
-          ...formState,
-          values: {}
-        }));
-        alert('create success')
-      })
+      const paymentInfo = await getPaymentInfo(paymentCode)
+      if (paymentInfo.length === 0) {
+        db.collection("payment-info").add({
+          name: name,
+          role,
+          payment_code: paymentCode,
+          balance
+        }).then(()=>{
+          setFormState(formState => ({
+            ...formState,
+            values: {}
+          }));
+          alert('create success')
+        })
+      }else{
+        alert('payment code is exist')
+      }
+      
     }else {
       alert('need login')
     }
