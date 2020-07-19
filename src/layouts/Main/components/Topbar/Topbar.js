@@ -70,6 +70,19 @@ const Topbar = props => {
             View calender
           </Link>
         </IconButton>
+        <IconButton
+            className={classes.signOutButton}
+            color="inherit"
+          >
+          <Link
+            color={'inherit'}
+            component={RouterLink}
+            to="/signup"
+            variant="h6"
+          >
+            Create payment info
+          </Link>
+        </IconButton>
         <div className={classes.flexGrow} />
         <IconButton
             className={classes.signOutButton}

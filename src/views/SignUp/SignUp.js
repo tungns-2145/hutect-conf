@@ -1,51 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Button,
-  IconButton,
   TextField,
-  Link,
   FormHelperText,
-  Checkbox,
   Typography
 } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import firebase, {db} from '../../config'
+import {db} from '../../config'
 
 const schema = {
-  firstName: {
+  name: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
       maximum: 32
     }
   },
-  lastName: {
+  paymentCode: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
       maximum: 32
     }
   },
-  email: {
+  role: {
     presence: { allowEmpty: false, message: 'is required' },
-    email: true,
     length: {
       maximum: 64
     }
   },
-  password: {
+  balance: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
       maximum: 128
     }
   },
-  policy: {
-    presence: { allowEmpty: false, message: 'is required' },
-    checked: true
-  }
 };
 
 const useStyles = makeStyles(theme => ({
@@ -116,7 +107,7 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: 100,
     paddingRight: 100,
     paddingBottom: 125,
-    flexBasis: 700,
+    flexBasis: 800,
     [theme.breakpoints.down('sm')]: {
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2)
@@ -142,7 +133,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SignUp = props => {
-  const { history } = props;
+  // const { history } = props;
 
   const classes = useStyles();
 
@@ -164,6 +155,7 @@ const SignUp = props => {
   }, [formState.values]);
 
   const handleChange = event => {
+    console.log(event.target.value)
     event.persist();
 
     setFormState(formState => ({
@@ -182,29 +174,44 @@ const SignUp = props => {
     }));
   };
 
-  const handleBack = () => {
-    history.goBack();
+  const handleSignUp = event => {
+    const { role, balance, name, paymentCode } = formState.values
+    console.log( role, balance )
+    event.preventDefault();
+    const uid = localStorage.getItem('uid')
+    if(uid) {
+      db.collection("payment-info").add({
+        name: name,
+        role,
+        payment_code: paymentCode,
+        balance
+      }).then(()=>{
+        setFormState(formState => ({
+          ...formState,
+          values: {}
+        }));
+        alert('create success')
+      })
+    }else {
+      alert('need login')
+    }
   };
 
-  const handleSignUp = event => {
-    const { email, password, firstName, lastName } = formState.values
-    console.log( email, password )
-    event.preventDefault();
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(()=>{
-      const {uid, email} = firebase.auth().currentUser
-      db.collection("users").doc(uid).set({
-        name: firstName + lastName,
-        email : email,
-      }).then(()=>{
-        history.push('/');
-      })
-    })
-    .catch(function(error) {
-      var errorMessage = error.message;
-      alert(errorMessage)
-    });
-  };
+  const states = [
+    {
+      value: '',
+      label: ''
+    },
+    {
+      value: 'teacher',
+      label: 'Teacher'
+    },
+    {
+      value: 'student',
+      label: 'Student'
+    },
+  ];
+
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -218,23 +225,16 @@ const SignUp = props => {
         <Grid
           className={classes.quoteContainer}
           item
-          lg={5}
+          lg={2}
         >
-          <div className={classes.quote}>
-          </div>
         </Grid>
         <Grid
           className={classes.content}
           item
-          lg={7}
+          lg={8}
           xs={12}
         >
           <div className={classes.content}>
-            <div className={classes.contentHeader}>
-              <IconButton onClick={handleBack}>
-                <ArrowBackIcon />
-              </IconButton>
-            </div>
             <div className={classes.contentBody}>
               <form
                 className={classes.form}
@@ -244,95 +244,82 @@ const SignUp = props => {
                   className={classes.title}
                   variant="h2"
                 >
-                  Create new account
+                  Create payment info
                 </Typography>
                 <Typography
                   color="textSecondary"
                   gutterBottom
                 >
-                  Use your email to create new account
+                  Create payment info for teacher or student
                 </Typography>
                 <TextField
                   className={classes.textField}
-                  error={hasError('firstName')}
+                  error={hasError('name')}
                   fullWidth
                   helperText={
-                    hasError('firstName') ? formState.errors.firstName[0] : null
+                    hasError('name') ? formState.errors.name[0] : null
                   }
-                  label="First name"
-                  name="firstName"
+                  label="Name"
+                  name="name"
                   onChange={handleChange}
                   type="text"
-                  value={formState.values.firstName || ''}
+                  value={formState.values.name || ''}
                   variant="outlined"
                 />
                 <TextField
                   className={classes.textField}
-                  error={hasError('lastName')}
+                  error={hasError('paymentCode')}
                   fullWidth
                   helperText={
-                    hasError('lastName') ? formState.errors.lastName[0] : null
+                    hasError('paymentCode') ? formState.errors.paymentCode[0] : null
                   }
-                  label="Last name"
-                  name="lastName"
+                  label="Payment code"
+                  name="paymentCode"
                   onChange={handleChange}
                   type="text"
-                  value={formState.values.lastName || ''}
+                  value={formState.values.paymentCode || ''}
                   variant="outlined"
                 />
                 <TextField
                   className={classes.textField}
-                  error={hasError('email')}
                   fullWidth
                   helperText={
-                    hasError('email') ? formState.errors.email[0] : null
+                    hasError('role') ? formState.errors.role[0] : null
                   }
-                  label="Email address"
-                  name="email"
+                  error={hasError('role')}
+                  label="Select role"
+                  name="role"
                   onChange={handleChange}
-                  type="text"
-                  value={formState.values.email || ''}
+                  required
+                  select
+                  // eslint-disable-next-line react/jsx-sort-props
+                  SelectProps={{ native: true }}
+                  value={formState.values.state}
                   variant="outlined"
-                />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('password')}
-                  fullWidth
-                  helperText={
-                    hasError('password') ? formState.errors.password[0] : null
-                  }
-                  label="Password"
-                  name="password"
-                  onChange={handleChange}
-                  type="password"
-                  value={formState.values.password || ''}
-                  variant="outlined"
-                />
-                <div className={classes.policy}>
-                  <Checkbox
-                    checked={formState.values.policy || false}
-                    className={classes.policyCheckbox}
-                    color="primary"
-                    name="policy"
-                    onChange={handleChange}
-                  />
-                  <Typography
-                    className={classes.policyText}
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    I have read the{' '}
-                    <Link
-                      color="primary"
-                      component={RouterLink}
-                      to="#"
-                      underline="always"
-                      variant="h6"
+                >
+                  {states.map(option => (
+                    <option
+                      key={option.value}
+                      value={option.value}
                     >
-                      Terms and Conditions
-                    </Link>
-                  </Typography>
-                </div>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+                <TextField
+                  className={classes.textField}
+                  error={hasError('balance')}
+                  fullWidth
+                  helperText={
+                    hasError('balance') ? formState.errors.balance[0] : null
+                  }
+                  label="Balance"
+                  name="balance"
+                  onChange={handleChange}
+                  type="number"
+                  value={formState.values.balance || ''}
+                  variant="outlined"
+                />
                 {hasError('policy') && (
                   <FormHelperText error>
                     {formState.errors.policy[0]}
@@ -347,21 +334,8 @@ const SignUp = props => {
                   type="submit"
                   variant="contained"
                 >
-                  Sign up now
+                  Create now
                 </Button>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Have an account?{' '}
-                  <Link
-                    component={RouterLink}
-                    to="/signin"
-                    variant="h6"
-                  >
-                    Sign in
-                  </Link>
-                </Typography>
               </form>
             </div>
           </div>
