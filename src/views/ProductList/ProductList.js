@@ -10,7 +10,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { db } from '../../config';
 
 // const SECRET = '8cd8ef52e8e101574e400365b55e11a6';
-const domain  = 'https://meet.jit.si';
+// const domain  = 'https://meet.jit.si';
 
 const localizer = momentLocalizer(moment);
 
@@ -128,12 +128,12 @@ class ProductList extends Component {
   };
 
   onAdd = async (event) => {
-    const { start, end, title, publicFlag } = event
+    const { start, end, title, publicFlag, linkClass } = event
     let data = {
       start: new Date(start),
       end: new Date(end),
       title: title,
-      linkClass: domain,
+      linkClass: linkClass,
       publicFlag
     }
     const meeting = await db.collection(`link_class`).add(data)

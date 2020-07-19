@@ -164,7 +164,7 @@ const AddEvent = forwardRef((props, ref) => {
             variant="outlined"
           />
           {
-            mode === 'edit' &&
+            mode === 'edit' ?
             <>
               <TextField
                 className={classes.field2}
@@ -186,6 +186,16 @@ const AddEvent = forwardRef((props, ref) => {
                 </Button>
               </div>
             </>
+            : 
+            <TextField
+              className={classes.field}
+              fullWidth
+              label="Link class"
+              name="linkClass"
+              value={values.linkClass}
+              onChange={handleFieldChange}
+              variant="outlined"
+            />
           }
           {
             mode === 'add' &&
